@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To Do List</title>
-    <script src="index.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To Do List</title>
+  <style>
+    body {
+      background-color: rgb(177, 124, 86);
+    }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>To Do List</h1>
-        Adicione suas tarefas:
-        
-    </header>
-    <section>
-        <div id="input">
-       <input type="text" id txt>
-       <input type="button" value="Adicionar" onclick="adicionar()" placeholder="Escreva aqui sua tarefa">
+  <header>
+    <h1>To Do List</h1>
+    Adicione suas tarefas:
+  </header>
+  <section>
+    
+    <div id="input">
+      <input type="text" id="txt" placeholder="O que você precisa fazer?">
+      <input type="button" value="Adicionar" onclick="criarLista()">
+      <input type="reset" value="Limpar" onclick="limpar()">
+        </div>
+    <div id="mostraItens" class="mostraItens">
     </div>
 
-        <div id="itensLista">
-
-        </div>
-    </section>
+    <ul id="ul" class="ul">
+    </ul>
     
+  </section>
+  <script src="index.js"></script>
 </body>
 </html>
