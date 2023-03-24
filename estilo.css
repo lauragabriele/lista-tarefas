@@ -51,31 +51,36 @@ section {
 }
 
 
-.divEsquerda{
+.divEsquerda {
   display: flex;
   text-transform: capitalize;
-}  
-.divDireita{
- position: absolute;
- right: 0;
-  
 }
+
+.divDireita {
+  position: absolute;
+  right: 0;
+
+}
+
 ul {
   list-style-type: circle;
   padding: 0;
-  width:500px;
-  overflow-y:auto;
+  width: 500px;
+  overflow-y: auto;
 }
+
 ul>li {
-  height:50px;
-  margin-bottom:5px;
-  width:100%;
+  height: 50px;
+  margin-bottom: 5px;
+  width: 100%;
 }
-li{
+
+li {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.txt{
+
+.txt {
   text-transform: capitalize;
 }

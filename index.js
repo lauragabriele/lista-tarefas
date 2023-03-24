@@ -1,7 +1,7 @@
 const ul = getElementById('ul')
 const storage = localStorage.getItem('array')
 const listaTarefas = storage ? JSON.parse(storage) : []
-if(listaTarefas.length>0){
+if (listaTarefas.length > 0) {
   listaTarefas.forEach(adicionaNaLista)
 }
 
@@ -103,7 +103,8 @@ function tarefaConcluida(divEsquerda, tarefa, index) {
     tarefa.classList.toggle('checked')
     if (marcarConcluido.checked) {
       listaTarefas[index].completed = true
-    } else {
+    }
+    else {
       listaTarefas[index].completed = false
     }
     localStorage.setItem('array', JSON.stringify(listaTarefas))
