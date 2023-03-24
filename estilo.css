@@ -1,21 +1,81 @@
-.checked{
-  text-decoration-line: line-through; 
+.checked {
+  text-decoration-line: line-through;
 }
-body{
+
+body {
   background-color: rgb(153, 211, 153);
   text-align: center;
-  font: normal 20 pt arial, sans-serif 
+  font: normal 20 pt arial, sans-serif
 }
-section{
+
+section {
   background: white;
-    border-radius: 20px;
-    padding: 30px;
-    width: 500px;
-    margin:auto;
-    box-shadow: 5px 5px 5px px rgba(0, 0, 0, 0);
-    font:normal 50 pt Arial Black
+  border-radius: 20px;
+  padding: 30px;
+  width: 500px;
+  margin: auto;
+  box-shadow: 5px 5px 5px px rgba(39, 37, 37, 0);
+  font: normal 50 pt Arial Black
 }
-#add{
-  height: 4px;
-  width: 1px;
+
+#limpa {
+  background: rgb(235, 235, 235);
+  border-radius: 5px;
+  margin: auto;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0.368);
+  margin: 0;
+  padding: 0;
+  display: contents;
+}
+
+#adiciona {
+  background: rgb(235, 235, 235);
+  border-radius: 5px;
+  margin: auto;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0.368);
+  margin: 0;
+  padding: 0;
+  display: contents;
+}
+
+.excluir {
+  display: contents;
+  margin: 0;
+  padding: 0;
+}
+
+.editar {
+  margin: 0;
+  padding: 0;
+  display: contents;
+}
+
+
+.divEsquerda{
+  display: flex;
+  text-transform: capitalize;
+}  
+.divDireita{
+ position: absolute;
+ right: 0;
+  
+}
+ul {
+  list-style-type: circle;
+  padding: 0;
+  width:500px;
+  overflow-y:auto;
+}
+ul>li {
+  height:50px;
+  margin-bottom:5px;
+  width:100%;
+}
+li{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.txt{
+  text-transform: capitalize;
 }
