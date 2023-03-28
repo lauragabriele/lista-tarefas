@@ -1,54 +1,83 @@
 const ul = getElementById('ul')
-const storage = localStorage.getItem('array')
-const listaTarefas = storage ? JSON.parse(storage) : []
-if (listaTarefas.length > 0) {
-  listaTarefas.forEach(adicionaNaLista)
-}
+const listTask =  localStorage.getItem('array') ? JSON.parse(localStorage.getItem('array')) : []
+storage()
 
 function getElementById(id) {
   return document.getElementById(id)
 }
 
-function itemValue() {
+function createElement(id) {
+  return document.createElement(id)
+}
+
+function getInputValue() { 
   return getElementById('txt').value
 }
 
-function limparInput(item) {
-  if (itemValue() == '') {
+function clearInput(item = getElementById('txt')) {
+  if (item.value === '') {
     window.alert('Não há o que ser excluído!')
   }
   item.value = ''
 }
 
-function addTarefaArray() {
-  if (itemValue() == '') {
+function storage(){
+  const storage = localStorage.getItem('array')
+  localStorage.setItem('array', JSON.stringify(listTask))
+  if (listTask.length > 0) {
+    listTask.forEach((el, i) => (render(el, i)))
+  }  
+}
+
+function addTaskArray() {
+  if (getInputValue() == '') {
     window.alert('Adicione uma tarefa')
-    return itemValue()
+    return
   }
-  listaTarefas.push({ name: itemValue(), id: Math.floor(Math.random() * Date.now()), completed: false })
+  const task = {
+    name: getInputValue(),
+    id: Math.floor(Math.random() * Date.now()),
+    completed: false 
+  }
+  listTask.push(task)
+  clearInput()
   criarListaTarefas()
-  limparInput(getElementById('txt'))
-  localStorage.setItem('array', JSON.stringify(listaTarefas))
+  storage(listTask)
 }
 
-function adicionaNaLista(element, index) {
-  const lista = document.createElement('li')
-  const divEsquerda = document.createElement('div')
-  divEsquerda.className = 'divEsquerda'
-  const divDireita = document.createElement('div')
-  divDireita.className = 'divDireta'
-  const tarefa = document.createElement('span')
-  marcarConcluido = tarefaConcluida(divEsquerda, tarefa, index)
-  botaoExcluir = excluiTarefa(lista, listaTarefas, divDireita, index)
-  botaoEditar = editaTarefa(listaTarefas, index, divDireita)
-  tarefa.innerText = listaTarefas[index].name
-  divEsquerda.appendChild(tarefa)
-  lista.appendChild(divEsquerda)
-  lista.appendChild(divDireita)
-  ul.appendChild(lista)
+function render(_element, index) {
+  const listItem = document.getElementById(listTask[index].id);
+  if (listItem) {
+    return
+  }
+  const baseStructure = {
+    divEsquerda: createElement('div'),
+    divDireita: createElement('div'),
+    tarefa: createElement('span'),
+    lista: createElement('li'),
+  }
+  tarefaConcluida(baseStructure.divEsquerda, baseStructure.tarefa, index)
+  buildLeftDiv(baseStructure.divEsquerda, baseStructure.lista,baseStructure.tarefa)
+  buildRightDiv(baseStructure.divDireita, baseStructure.lista, index)
+  baseStructure.tarefa.innerText = listTask[index].name
+  baseStructure.lista.setAttribute('id', listTask[index].id)
+  ul.appendChild(baseStructure.lista)
 }
 
-function excluiTarefa(lista, listaTarefas, divDireita, index) {
+function buildRightDiv(div, itemList, index) {
+  div.className = 'divDireta'
+  itemList.appendChild(div)
+  excluiTarefa(itemList, listTask, div, index)
+  editaTarefa(listTask, index, div)
+}
+
+function buildLeftDiv(div, itemList, task){
+  div.className = 'divEsquerda'
+  div.appendChild(task)
+  itemList.appendChild(div)
+}
+
+function excluiTarefa(lista, listTask, divDireita, index) {
   const iconExcluir = document.createElement('span')
   const botaoExcluir = document.createElement('button')
   botaoExcluir.className = 'excluir'
@@ -61,15 +90,15 @@ function excluiTarefa(lista, listaTarefas, divDireita, index) {
     if (confirmDelete == false) {
       return itemValue()
     }
-    const tarefaIndex = listaTarefas.findIndex(tarefa => tarefa.id === (listaTarefas[index] && listaTarefas[index].id))
-    listaTarefas.splice(tarefaIndex, 1)
+    const tarefaIndex = listTask.findIndex(tarefa => tarefa.id === (listTask[index] && listTask[index].id))
+    listTask.splice(tarefaIndex, 1)
 
     ul.removeChild(lista)
-    localStorage.setItem('array', JSON.stringify(listaTarefas))
-  })
+    storage(listTask) 
+   })
 }
 
-function editaTarefa(listaTarefas, index, divDireita) {
+function editaTarefa(listTask, index, divDireita) {
   const iconEditar = document.createElement('span')
   const botaoEditar = document.createElement('button')
   botaoEditar.className = 'editar'
@@ -80,7 +109,7 @@ function editaTarefa(listaTarefas, index, divDireita) {
   divDireita.appendChild(botaoEditar)
   botaoEditar.addEventListener('click', () => {
     const editar = parseInt(botaoEditar.value)
-    if (listaTarefas[editar].completed) {
+    if (listTask[editar].completed) {
       window.alert('Não é possível editar uma tarefa concluída.')
       return
     }
@@ -88,26 +117,27 @@ function editaTarefa(listaTarefas, index, divDireita) {
     if (tarefaEditada == null) {
       return
     }
-    listaTarefas[editar].name = tarefaEditada
-    localStorage.setItem('array', JSON.stringify(listaTarefas))
+    listTask[editar].name = tarefaEditada
+    storage(listTask)
     criarListaTarefas()
   })
 }
+
 function tarefaConcluida(divEsquerda, tarefa, index) {
   const marcarConcluido = document.createElement('input')
   marcarConcluido.setAttribute('type', 'checkbox')
-  const estadoTarefa = listaTarefas[index].completed
+  const estadoTarefa = listTask[index].completed
   marcarConcluido.checked = estadoTarefa
   divEsquerda.appendChild(marcarConcluido)
   marcarConcluido.addEventListener('click', () => {
     tarefa.classList.toggle('checked')
     if (marcarConcluido.checked) {
-      listaTarefas[index].completed = true
+      listTask[index].completed = true
     }
     else {
-      listaTarefas[index].completed = false
+      listTask[index].completed = false
     }
-    localStorage.setItem('array', JSON.stringify(listaTarefas))
+    storage()
   })
   if (estadoTarefa) {
     tarefa.classList.add('checked')
@@ -118,8 +148,8 @@ function criarListaTarefas() {
   while (ul.firstChild) {
     ul.removeChild(ul.firstChild)
   }
-  listaTarefas.forEach(adicionaNaLista)
-  return listaTarefas
+  listTask.forEach(render)
+  return listTask
 }
 
 
