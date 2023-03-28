@@ -22,7 +22,6 @@ function clearInput(item = getElementById('txt')) {
 }
 
 function storage(){
-  const storage = localStorage.getItem('array')
   localStorage.setItem('array', JSON.stringify(listTask))
   if (listTask.length > 0) {
     listTask.forEach((el, i) => (render(el, i)))
@@ -31,7 +30,7 @@ function storage(){
 
 function addTaskArray() {
   if (getInputValue() == '') {
-    window.alert('Adicione uma tarefa')
+    window.alert('Adicione uma tarefa:')
     return
   }
   const task = {
@@ -41,110 +40,112 @@ function addTaskArray() {
   }
   listTask.push(task)
   clearInput()
-  criarListaTarefas()
-  storage(listTask)
+  createTaskList()
+  storage()
 }
 
 function render(_element, index) {
   const listItem = document.getElementById(listTask[index].id);
+  const taskId = listTask[index].id
   if (listItem) {
     return
   }
   const baseStructure = {
-    divEsquerda: createElement('div'),
-    divDireita: createElement('div'),
-    tarefa: createElement('span'),
-    lista: createElement('li'),
+    leftDiv: createElement('div'),
+    rightDiv: createElement('div'),
+    task: createElement('span'),
+    list: createElement('li'),
   }
-  tarefaConcluida(baseStructure.divEsquerda, baseStructure.tarefa, index)
-  buildLeftDiv(baseStructure.divEsquerda, baseStructure.lista,baseStructure.tarefa)
-  buildRightDiv(baseStructure.divDireita, baseStructure.lista, index)
-  baseStructure.tarefa.innerText = listTask[index].name
-  baseStructure.lista.setAttribute('id', listTask[index].id)
-  ul.appendChild(baseStructure.lista)
+  taskCompleted(baseStructure.leftDiv, baseStructure.task, index)
+  buildLeftDiv(baseStructure.leftDiv, baseStructure.list,baseStructure.task)
+  buildRightDiv(baseStructure.rightDiv, baseStructure.list, index)
+  baseStructure.task.innerText = listTask[index].name
+  baseStructure.list.setAttribute('id', taskId)
+  ul.appendChild(baseStructure.list)
 }
 
 function buildRightDiv(div, itemList, index) {
-  div.className = 'divDireta'
+  div.className = 'rightDiv'
   itemList.appendChild(div)
-  excluiTarefa(itemList, listTask, div, index)
-  editaTarefa(listTask, index, div)
+  deleteTask(itemList, listTask, div, index)
+  editTask(listTask, index, div)
 }
 
 function buildLeftDiv(div, itemList, task){
-  div.className = 'divEsquerda'
+  div.className = 'leftDiv'
   div.appendChild(task)
   itemList.appendChild(div)
 }
 
-function excluiTarefa(lista, listTask, divDireita, index) {
-  const iconExcluir = document.createElement('span')
-  const botaoExcluir = document.createElement('button')
-  botaoExcluir.className = 'excluir'
-  iconExcluir.innerText = 'delete'
-  iconExcluir.classList.add('material-symbols-outlined')
-  botaoExcluir.appendChild(iconExcluir)
-  divDireita.appendChild(botaoExcluir)
-  botaoExcluir.addEventListener('click', () => {
+function deleteTask(list, listTask, rightDiv, index) {
+  const iconDelete = document.createElement('span')
+  const deleteButton = document.createElement('button')
+  deleteButton.className = 'delete'
+  iconDelete.innerText = 'delete'
+  iconDelete.classList.add('material-symbols-outlined')
+  deleteButton.appendChild(iconDelete)
+  rightDiv.appendChild(deleteButton)
+  deleteButton.addEventListener('click', () => {
     const confirmDelete = window.confirm('Deseja excluir a tarefa?')
     if (confirmDelete == false) {
-      return itemValue()
+      return getInputValue()
     }
-    const tarefaIndex = listTask.findIndex(tarefa => tarefa.id === (listTask[index] && listTask[index].id))
-    listTask.splice(tarefaIndex, 1)
-
-    ul.removeChild(lista)
-    storage(listTask) 
+    const taskIndex = listTask.findIndex(task=> task.id === (listTask[index].id))
+    listTask.splice(taskIndex, 1)
+    ul.removeChild(list)
+    storage()
    })
 }
 
-function editaTarefa(listTask, index, divDireita) {
-  const iconEditar = document.createElement('span')
-  const botaoEditar = document.createElement('button')
-  botaoEditar.className = 'editar'
-  iconEditar.innerText = 'edit'
-  iconEditar.classList.add('material-symbols-outlined')
-  botaoEditar.value = index
-  botaoEditar.appendChild(iconEditar)
-  divDireita.appendChild(botaoEditar)
-  botaoEditar.addEventListener('click', () => {
-    const editar = parseInt(botaoEditar.value)
-    if (listTask[editar].completed) {
+function editTask(listTask, index, rightDiv) {
+  const iconEdit = document.createElement('span')
+  const buttonEdit= document.createElement('button')
+  buttonEdit.className = 'edit'
+  iconEdit.innerText = 'edit'
+  iconEdit.classList.add('material-symbols-outlined')
+  buttonEdit.value = index
+  buttonEdit.appendChild(iconEdit)
+  rightDiv.appendChild(buttonEdit)
+  buttonEdit.addEventListener('click', () => {
+  const toEdit = parseInt(buttonEdit.value)
+    if (listTask[toEdit].completed) {
       window.alert('Não é possível editar uma tarefa concluída.')
       return
     }
-    const tarefaEditada = window.prompt('Digite sua nova tarefa:')
-    if (tarefaEditada == null) {
+    const taskEdited = window.prompt('Digite sua nova tarefa:')
+    if (taskEdited == null) {
       return
     }
-    listTask[editar].name = tarefaEditada
-    storage(listTask)
-    criarListaTarefas()
+    listTask[toEdit].name = taskEdited
+    storage()
+    createTaskList
+()
   })
 }
 
-function tarefaConcluida(divEsquerda, tarefa, index) {
-  const marcarConcluido = document.createElement('input')
-  marcarConcluido.setAttribute('type', 'checkbox')
-  const estadoTarefa = listTask[index].completed
-  marcarConcluido.checked = estadoTarefa
-  divEsquerda.appendChild(marcarConcluido)
-  marcarConcluido.addEventListener('click', () => {
-    tarefa.classList.toggle('checked')
-    if (marcarConcluido.checked) {
-      listTask[index].completed = true
+function taskCompleted(leftDiv, task, index) {
+  const markDone= document.createElement('input')
+  markDone.setAttribute('type', 'checkbox')
+  const statusTask = listTask[index].completed
+  const taskIndex = listTask[index]
+  markDone.checked = statusTask
+  leftDiv.appendChild(markDone)
+  markDone.addEventListener('click', () => {
+    task.classList.toggle('checked')
+    if (markDone.checked) {
+     taskIndex.completed = true
     }
-    else {
-      listTask[index].completed = false
+    if(!markDone.checked) {
+      taskIndex.completed = false
     }
     storage()
   })
-  if (estadoTarefa) {
-    tarefa.classList.add('checked')
+  if (statusTask) {
+    task.classList.add('checked')
   }
 }
 
-function criarListaTarefas() {
+function createTaskList() {
   while (ul.firstChild) {
     ul.removeChild(ul.firstChild)
   }
