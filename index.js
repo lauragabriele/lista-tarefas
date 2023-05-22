@@ -123,7 +123,7 @@ function editTask(listTask, index, rightDiv) {
   })
 }
 
-function taskCompleted(leftDiv, task, index) {
+function taskCompleted(leftDiv, task, index) { 
   const markDone= document.createElement('input')
   markDone.setAttribute('type', 'checkbox')
   const statusTask = listTask[index].completed

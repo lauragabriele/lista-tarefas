@@ -54,13 +54,17 @@ section {
 .leftDiv {
   display: flex;
   text-transform: capitalize;
+  text-align: center;
+
 }
 
 .rightDiv{
   display: flex;
   text-transform: capitalize;
   position: absolute;
-  right: 30%;
+  right: 35%;
+  text-align: center;
+
 
 }
 
